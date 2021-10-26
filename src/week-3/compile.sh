@@ -1,0 +1,1 @@
+gcc -fopenmp sample-4.c -lm
