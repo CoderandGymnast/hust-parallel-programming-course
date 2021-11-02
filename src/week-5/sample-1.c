@@ -1,10 +1,9 @@
 #include<stdio.h>
-#include <stdio.h>
 #include<malloc.h>
 #include<math.h>
 #include <time.h>
 #include <stdlib.h>
-
+#include <omp.h>
 
 #define max(a,b) a>b?a:b
 
@@ -13,7 +12,7 @@ void logArr(int *arr,int n);
 
 int main() {
 srand(time(NULL));   // Initialization, should only be called once.
-int n=8;
+int n=16;
 int *arr=(int*) malloc(n*sizeof(int));
 int d=0;
 int threadCount=n/2;
@@ -39,9 +38,13 @@ while(1) {
     }
 
     // Process for the current level of Binary tree in bottom-up manner.
-    for(int i=0;i<threadCount;i++) {
-        int idLeft=i*range;
-        int idRight=idLeft+step;
+    int id,idLeft,idRight;
+    omp_set_num_threads(threadCount);
+    #pragma omp parallel private(id,idLeft,idRight)   // [NOTE]: OpenMP only parallelize partially
+    { // [NOTE]: must enter to new line. 
+        id= omp_get_thread_num();
+        idLeft=id*range;
+        idRight=idLeft+step;
         *(arr+idLeft)=max(*(arr+idLeft),*(arr+idRight));
     }
 
