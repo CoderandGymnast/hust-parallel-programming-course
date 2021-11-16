@@ -45,16 +45,17 @@ MPI_Scatter(A,ms,MPI_INT,As,ms,MPI_INT,0,MPI_COMM_WORLD); // Similar to steps 2,
 MPI_Scatter(B,ms,MPI_INT,Bs,ms,MPI_INT,0,MPI_COMM_WORLD);
 // Step 4: Tat ca cac Process tinh: As + Bs = Cs
 	for (i=0;i<ms;i++)	*(Cs+i) = *(As+i) + *(Bs+i);
-// Step 5: Cac Process <>0 gui Cs ve Process 0 
-	if (IDcpu != 0) {
-		MPI_Send(Cs,ms,MPI_INT,0,IDcpu+200,MPI_COMM_WORLD);
-	} else {
-// Step 6: Process 0 nhan cac Cs, tong hop thanh C
-		for (i=0;i<ms;i++)
-			*(C+i) = *(Cs+i);
-		for (cpu = 1;cpu<Ncpu;cpu++)
-			MPI_Recv(C+cpu*ms,ms,MPI_INT,cpu,cpu+200,MPI_COMM_WORLD,&thongbao);
-	}
+// // Step 5: Cac Process <>0 gui Cs ve Process 0 
+// 	if (IDcpu != 0) {
+// 		MPI_Send(Cs,ms,MPI_INT,0,IDcpu+200,MPI_COMM_WORLD);
+// 	} else {
+// // Step 6: Process 0 nhan cac Cs, tong hop thanh C
+// 		for (i=0;i<ms;i++)
+// 			*(C+i) = *(Cs+i);
+// 		for (cpu = 1;cpu<Ncpu;cpu++)
+// 			MPI_Recv(C+cpu*ms,ms,MPI_INT,cpu,cpu+200,MPI_COMM_WORLD,&thongbao);
+// 	}
+MPI_Gather(Cs,ms,MPI_INT,C,ms,MPI_INT,0,MPI_COMM_WORLD); // Similar to steps 2,3.
 // Step 7: Process 0 in ket qua ra man hinh
 	if (IDcpu == 0)
 		for (i=0;i<m;i++) printf("%d  ",*(C+i)); printf("\n");
