@@ -29,7 +29,7 @@ int main()
 	}
 
 	int numCols = c;
-	int NUM_THREADS = omp_get_num_threads();
+	int NUM_THREADS = 12; // use built-in function?
 	int numColsPerThread = floor(numCols / NUM_THREADS);
 	int numColsForLastThread = numCols - (NUM_THREADS - 1) * numColsPerThread;
 
